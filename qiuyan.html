@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		div{
+			width: 1360px;
+			height: 635px;
+			position: relative;
+			background: url(img/timg.jpg);
+			background-size: 100% 100%;
+		}
+		p{
+			position: absolute;
+			width: 160px;
+			height: 160px;
+			background-color: rgba(201,0,255,0.7);
+			background: url(img/qiu.gif);
+			background-size: 100% 100%;
+			border-radius: 50%;
+			top: 100px;
+			left: 100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+
+	<script type="text/javascript">
+		var box = document.getElementById("box");
+
+		//小球的构造函数
+		function Ball(left,top){
+			//直径
+			this.d = 160;
+			this.left = left || Math.random() * (box.clientWidth - this.d);
+			this.top = top|| Math.random() * (box.clientHeight - this.d);
+			//自己的直径
+			//每步移动的x分量、y分量。-5~5随机数
+			this.deltaX = parseInt(Math.random() * 11) - 5;
+			this.deltaY = parseInt(Math.random() * 11) - 5;
+			//初始化
+			this.init();
+			//渲染
+			this.move();
+		}
+		Ball.prototype.init = function(){
+			this.dom = document.createElement("p");
+			box.appendChild(this.dom);
+		}
+		//小球的渲染
+		Ball.prototype.render = function(){
+			//render的本质就是把自己的left属性、top属性作用到自己的dom的style身上。
+			this.dom.style.left = this.left + "px";
+			this.dom.style.top = this.top + "px";
+		}
+		//小球的移动
+		Ball.prototype.move = function(){
+			//备份
+			var self = this;
+			//定时器
+			this.timer = setInterval(function(){
+				self.left += self.deltaX;
+				self.top += self.deltaY;
+				//碰边检测
+				if(self.top >= box.clientHeight - self.d || self.top <= 0){
+					//碰到底边
+					self.deltaY = -self.deltaY;
+				}
+				if(self.left >= box.clientWidth - self.d || self.left <= 0){
+					self.deltaX = -self.deltaX;
+				}
+				 
+				self.render();
+			},10);
+		}
+		var x=1; 
+		var time= setInterval(function(){
+			x++;
+			new Ball();
+			if(x==9){
+				clearInterval(time);
+			}
+		},1000);
+
+
+	 	
+	</script>
+</body>
+</html>
